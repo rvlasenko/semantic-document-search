@@ -1,0 +1,25 @@
+[project]
+name = "semantic-document-search"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy",
+    "scikit-learn",
+    "sentence-transformers",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.mypy]
+strict = true
