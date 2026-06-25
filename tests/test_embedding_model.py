@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from collections.abc import Generator
 
 from semantic_search.chunk import TextChunk
