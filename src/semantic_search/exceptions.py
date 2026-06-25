@@ -4,3 +4,11 @@ class SemanticSearchError(Exception):
 
 class DataDirectoryNotFoundError(SemanticSearchError):
     """Raised when the data directory does not exist."""
+
+
+class IndexNotFoundError(SemanticSearchError):
+    """Raised when the index directory does not exist."""
+
+
+class IndexCorruptedError(SemanticSearchError):
+    """Raised when the index files are missing or cannot be loaded."""
