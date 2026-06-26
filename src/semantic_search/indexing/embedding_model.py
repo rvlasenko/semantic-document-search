@@ -1,7 +1,7 @@
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-from semantic_search.chunk import TextChunk
+from semantic_search.models.chunk import TextChunk
 
 
 class EmbeddingModel:

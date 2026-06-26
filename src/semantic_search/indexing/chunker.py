@@ -1,5 +1,5 @@
-from semantic_search.chunk import TextChunk
-from semantic_search.document import Document
+from semantic_search.models.chunk import TextChunk
+from semantic_search.models.document import Document
 
 
 class TextChunker:

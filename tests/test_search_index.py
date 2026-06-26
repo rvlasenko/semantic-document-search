@@ -4,11 +4,11 @@ from collections.abc import Generator
 import numpy as np
 import pytest
 
-from semantic_search.chunker import TextChunker
-from semantic_search.document import Document
-from semantic_search.embedding_model import EmbeddingModel
-from semantic_search.search_index import SearchIndex
-from semantic_search.search_result import SearchResult
+from semantic_search.indexing.chunker import TextChunker
+from semantic_search.indexing.embedding_model import EmbeddingModel
+from semantic_search.models.document import Document
+from semantic_search.models.search_result import SearchResult
+from semantic_search.search.search_index import SearchIndex
 
 DOCUMENTS = [
     Document(

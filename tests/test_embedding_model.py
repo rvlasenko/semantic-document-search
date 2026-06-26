@@ -3,8 +3,8 @@ import pytest
 from unittest.mock import patch
 from collections.abc import Generator
 
-from semantic_search.chunk import TextChunk
-from semantic_search.embedding_model import EmbeddingModel
+from semantic_search.indexing.embedding_model import EmbeddingModel
+from semantic_search.models.chunk import TextChunk
 
 CHUNK = TextChunk(
     text="Our refund policy allows returns within 30 days.", source="test/doc.txt"
@@ -13,7 +13,7 @@ CHUNK = TextChunk(
 
 @pytest.fixture
 def mock_model() -> Generator[EmbeddingModel]:
-    with patch("semantic_search.embedding_model.SentenceTransformer") as mock:
+    with patch("semantic_search.indexing.embedding_model.SentenceTransformer") as mock:
         mock.return_value.encode.return_value = np.ones((384,))
         yield EmbeddingModel()
 

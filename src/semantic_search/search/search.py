@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
-from semantic_search.chunk import TextChunk
-from semantic_search.search_result import SearchResult
+from semantic_search.models.chunk import TextChunk
+from semantic_search.models.search_result import SearchResult
 
 
 def search(

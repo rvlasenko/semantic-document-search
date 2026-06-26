@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from semantic_search.document import Document
 from semantic_search.exceptions import DataDirectoryNotFoundError
+from semantic_search.models.document import Document
 
 
 class DocumentLoader:

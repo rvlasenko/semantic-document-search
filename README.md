@@ -56,14 +56,19 @@ How do I contact customer support?...
 
 ```
 src/semantic_search/
-├── document.py        # Document dataclass
-├── loader.py          # Loads .txt files from data/
-├── chunk.py           # TextChunk dataclass
-├── chunker.py         # Splits documents into overlapping chunks
-├── embedding_model.py # Encodes chunks via sentence-transformers
-├── search.py          # Cosine similarity search function
-├── search_index.py    # Stateful index — add documents, run queries
-└── __main__.py        # CLI entry point
+├── __main__.py             # CLI entry point
+├── exceptions.py           # Custom exception hierarchy
+├── models/
+│   ├── document.py         # Document dataclass
+│   ├── chunk.py            # TextChunk dataclass
+│   └── search_result.py    # SearchResult dataclass
+├── indexing/
+│   ├── loader.py           # Loads .txt files from data/
+│   ├── chunker.py          # Splits documents into overlapping chunks
+│   └── embedding_model.py  # Encodes chunks via sentence-transformers
+└── search/
+    ├── search.py           # Cosine similarity search function
+    └── search_index.py     # Stateful index — add documents, run queries
 ```
 
 ## Limitations

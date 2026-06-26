@@ -2,9 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from semantic_search.document import Document
 from semantic_search.exceptions import DataDirectoryNotFoundError
-from semantic_search.loader import DocumentLoader
+from semantic_search.indexing.loader import DocumentLoader
+from semantic_search.models.document import Document
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
