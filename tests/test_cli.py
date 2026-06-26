@@ -42,14 +42,24 @@ def test_search_command_prints_results() -> None:
     assert "score=" in result.stdout
 
 
+def test_search_top_k_flag() -> None:
+    result = subprocess.run(
+        [sys.executable, "-m", "semantic_search", "search", "refund", "--top-k", "1"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert "#1" in result.stdout
+    assert "#2" not in result.stdout
+
+
 def test_search_command_without_query_exits_with_error() -> None:
     result = subprocess.run(
         [sys.executable, "-m", "semantic_search", "search"],
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 1
-    assert "Usage:" in result.stdout
+    assert result.returncode != 0
 
 
 def test_unknown_command_exits_with_error() -> None:
@@ -58,4 +68,15 @@ def test_unknown_command_exits_with_error() -> None:
         capture_output=True,
         text=True,
     )
-    assert result.returncode == 1
+    assert result.returncode != 0
+
+
+def test_help_exits_successfully() -> None:
+    result = subprocess.run(
+        [sys.executable, "-m", "semantic_search", "--help"],
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0
+    assert "index" in result.stdout
+    assert "search" in result.stdout

@@ -1,3 +1,4 @@
+import argparse
 import sys
 from pathlib import Path
 
@@ -7,58 +8,90 @@ from semantic_search.indexing.embedding_model import EmbeddingModel
 from semantic_search.indexing.loader import DocumentLoader
 from semantic_search.search.search_index import SearchIndex
 
-DATA_DIR = Path("data")
-INDEX_DIR = Path(".index")
-TOP_K = 3
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        prog="semantic_search",
+        description="Semantic search engine for plain text documents.",
+    )
+
+    subparsers = parser.add_subparsers(dest="command")
+
+    index_parser = subparsers.add_parser(
+        "index", help="Index documents from data directory."
+    )
+    index_parser.add_argument(
+        "--data-dir",
+        type=Path,
+        default=Path("data"),
+        metavar="PATH",
+        help="Directory with .txt documents (default: data/).",
+    )
+    index_parser.add_argument(
+        "--index-dir",
+        type=Path,
+        default=Path(".index"),
+        metavar="PATH",
+        help="Where to save the index (default: .index/).",
+    )
+
+    search_parser = subparsers.add_parser("search", help="Search indexed documents.")
+    search_parser.add_argument("query", type=str, help="Search query.")
+    search_parser.add_argument(
+        "--top-k",
+        type=int,
+        default=3,
+        metavar="N",
+        help="Number of results to return (default: 3).",
+    )
+    search_parser.add_argument(
+        "--index-dir",
+        type=Path,
+        default=Path(".index"),
+        metavar="PATH",
+        help="Index directory to load (default: .index/).",
+    )
+
+    return parser
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
-        print("Usage:")
-        print("  python -m semantic_search index")
-        print('  python -m semantic_search search "your query"')
-        sys.exit(1)
+    parser = build_parser()
+    args = parser.parse_args()
 
-    command = sys.argv[1]
+    if not args.command:
+        parser.print_help()
+        return
+
     chunker = TextChunker(chunk_size=50, chunk_overlap=10)
     model = EmbeddingModel()
 
-    if command == "index":
-        documents = DocumentLoader(DATA_DIR).load()
+    if args.command == "index":
+        documents = DocumentLoader(args.data_dir).load()
 
         if not documents:
-            print(f"No documents found in {DATA_DIR}/")
+            print(f"No documents found in {args.data_dir}/")
             sys.exit(1)
 
         index = SearchIndex(chunker, model)
         index.add_documents(documents)
-        index.save(INDEX_DIR)
-        print(f"Indexed {len(documents)} documents → {INDEX_DIR}/")
+        index.save(args.index_dir)
+        print(f"Indexed {len(documents)} documents → {args.index_dir}/")
 
-    elif command == "search":
-        if len(sys.argv) < 3:
-            print('Usage: python -m semantic_search search "your query"')
-            sys.exit(1)
-
-        query = sys.argv[2]
-
+    elif args.command == "search":
         try:
-            index = SearchIndex.load(INDEX_DIR, chunker, model)
+            index = SearchIndex.load(args.index_dir, chunker, model)
         except IndexNotFoundError:
             print("Index not found. Run first: python -m semantic_search index")
             sys.exit(1)
 
-        results = index.search(query, top_k=TOP_K)
+        results = index.search(args.query, top_k=args.top_k)
 
-        print(f"\nQuery: {query}\n")
+        print(f"\nQuery: {args.query}\n")
         for i, result in enumerate(results, 1):
             print(f"#{i} score={result.score:.3f} source={result.source}")
             print(result.text)
             print()
-
-    else:
-        print(f"Unknown command: {command}")
-        sys.exit(1)
 
 
 if __name__ == "__main__":
