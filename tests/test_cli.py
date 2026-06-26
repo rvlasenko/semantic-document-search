@@ -1,5 +1,12 @@
+import os
 import subprocess
 import sys
+
+
+def make_env() -> dict[str, str]:
+    env = os.environ.copy()
+    env["PYTHONPATH"] = "src"
+    return env
 
 
 def test_index_command_exits_successfully() -> None:
@@ -7,6 +14,7 @@ def test_index_command_exits_successfully() -> None:
         [sys.executable, "-m", "semantic_search", "index"],
         capture_output=True,
         text=True,
+        env=make_env(),
     )
     assert result.returncode == 0
 
@@ -22,6 +30,7 @@ def test_search_command_exits_successfully() -> None:
         ],
         capture_output=True,
         text=True,
+        env=make_env(),
     )
     assert result.returncode == 0
 
@@ -37,6 +46,7 @@ def test_search_command_prints_results() -> None:
         ],
         capture_output=True,
         text=True,
+        env=make_env(),
     )
     assert "#1" in result.stdout
     assert "score=" in result.stdout
@@ -47,6 +57,7 @@ def test_search_top_k_flag() -> None:
         [sys.executable, "-m", "semantic_search", "search", "refund", "--top-k", "1"],
         capture_output=True,
         text=True,
+        env=make_env(),
     )
     assert result.returncode == 0
     assert "#1" in result.stdout
@@ -58,6 +69,7 @@ def test_search_command_without_query_exits_with_error() -> None:
         [sys.executable, "-m", "semantic_search", "search"],
         capture_output=True,
         text=True,
+        env=make_env(),
     )
     assert result.returncode != 0
 
@@ -67,6 +79,7 @@ def test_unknown_command_exits_with_error() -> None:
         [sys.executable, "-m", "semantic_search", "unknown"],
         capture_output=True,
         text=True,
+        env=make_env(),
     )
     assert result.returncode != 0
 
@@ -76,6 +89,7 @@ def test_help_exits_successfully() -> None:
         [sys.executable, "-m", "semantic_search", "--help"],
         capture_output=True,
         text=True,
+        env=make_env(),
     )
     assert result.returncode == 0
     assert "index" in result.stdout
