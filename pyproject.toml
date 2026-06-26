@@ -23,3 +23,7 @@ target-version = "py313"
 
 [tool.mypy]
 strict = true
+
+[[tool.mypy.overrides]]
+module = "sklearn.*"
+ignore_missing_imports = true
