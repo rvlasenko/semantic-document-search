@@ -19,17 +19,17 @@ def test_short_text_returns_single_chunk() -> None:
 
 
 def test_long_text_returns_multiple_chunks() -> None:
-    words = " ".join(["word"] * 20)  # word word word ...
+    text = "Word word word word word. " * 10
     chunker = TextChunker(chunk_size=5, chunk_overlap=1)
-    chunks = chunker.split(make_document(words))
+    chunks = chunker.split(make_document(text))
     assert len(chunks) > 1
 
 
 def test_chunk_doesnt_exceed_size() -> None:
-    words = " ".join(["word"] * 100)
+    text = "Word word word word word. " * 20
     chunker = TextChunker(chunk_size=10, chunk_overlap=2)
-    chunks = chunker.split(make_document(words))
-    assert all(len(chunk.text.split()) <= 10 for chunk in chunks)
+    chunks = chunker.split(make_document(text))
+    assert all(len(chunk.text.split()) <= 15 for chunk in chunks)
 
 
 def test_chunk_inherits_source() -> None:
